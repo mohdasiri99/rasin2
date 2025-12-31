@@ -1,0 +1,176 @@
+from fpdf import FPDF
+import textwrap
+
+# ---------------------------------------------------------
+# 1. المنهجية العلمية للمعيار (RASIN Framework V2.0 Data)
+# ---------------------------------------------------------
+# تم صياغة هذه البيانات بناءً على التطوير العلمي (بلوم، كيركباتريك، رؤية 2030)
+# المصادر الأصلية للمحاور: [cite: 6, 11, 19, 26, 32]
+# ---------------------------------------------------------
+
+rasin_framework = {
+    "info": {
+        "title": "معيار رصين لتقييم المشاريع القرائية (الإصدار 2.0)",
+        "vision": "نحو مشاريع قرائية مستدامة تعزز جودة الحياة",
+        "total_weight": "100%"
+    },
+    "standards": [
+        {
+            "code": "R",
+            "name": "البحث والتصميم (Research & Design)",
+            "weight": "28%",
+            "focus": "الرصانة العلمية والملاءمة",
+            "indicators": [
+                {
+                    "id": "R-1",
+                    "title": "المنهجية التربوية",
+                    "measure": "مدى استناد المشروع لنظرية تعلم معتمدة (مثل: البنائية، القراءة الحوارية).",
+                    "scientific_basis": "نظريات التعلم الحديثة"
+                },
+                {
+                    "id": "R-2",
+                    "title": "مصفوفة اختيار المحتوى",
+                    "measure": "وجود مصفوفة تحدد (المستوى اللغوي، القيمة المعرفية، السلامة الفكرية).",
+                    "scientific_basis": "تصنيف بلوم (Bloom's Taxonomy)"
+                },
+                {
+                    "id": "R-3",
+                    "title": "المواءمة الوطنية",
+                    "measure": "مدى تعزيز المحتوى للهوية الوطنية وقيم رؤية 2030.",
+                    "scientific_basis": "برنامج تنمية القدرات البشرية"
+                }
+            ]
+        },
+        {
+            "code": "A",
+            "name": "التطبيق والأنشطة (Application)",
+            "weight": "24%",
+            "focus": "الفاعلية والتعلم العميق",
+            "indicators": [
+                {
+                    "id": "A-1",
+                    "title": "استراتيجيات التفكير",
+                    "measure": "توظيف أدوات التفكير المرئي والنقدي بدلاً من التلقين.",
+                    "scientific_basis": "التعلم النشط (Active Learning)"
+                },
+                {
+                    "id": "A-2",
+                    "title": "بيئة التدفق (Flow)",
+                    "measure": "توازن الأنشطة بين التحدي والمهارة لضمان عدم الملل.",
+                    "scientific_basis": "نظرية التدفق (Csikszentmihalyi)"
+                },
+                {
+                    "id": "A-3",
+                    "title": "جودة المخرجات",
+                    "measure": "إنتاج معرفي ملموس من المشاركين (مقال، تلخيص إبداعي، حوار).",
+                    "scientific_basis": "التعلم القائم على المشاريع (PBL)"
+                }
+            ]
+        },
+        {
+            "code": "S",
+            "name": "الحوكمة والتمكين (Stewardship)",
+            "weight": "18%",
+            "focus": "الكفاءة التشغيلية",
+            "indicators": [
+                {
+                    "id": "S-1",
+                    "title": "التطوع الاحترافي",
+                    "measure": "نسبة تفعيل المتطوعين وتوظيف مهاراتهم التخصصية.",
+                    "scientific_basis": "إدارة الموارد البشرية"
+                },
+                {
+                    "id": "S-2",
+                    "title": "الكفاءة المالية",
+                    "measure": "وضوح الموازنة والعائد المباشر من التكاليف.",
+                    "scientific_basis": "المحاسبة الإدارية"
+                }
+            ]
+        },
+        {
+            "code": "I",
+            "name": "الشمول والوصول (Inclusion)",
+            "weight": "16%",
+            "focus": "العدالة والفرص",
+            "indicators": [
+                {
+                    "id": "I-1",
+                    "title": "الوصول الرقمي",
+                    "measure": "ملاءمة المنصات لذوي الإعاقة (W3C Standards).",
+                    "scientific_basis": "معايير الوصول العالمية"
+                },
+                {
+                    "id": "I-2",
+                    "title": "العدالة الجغرافية",
+                    "measure": "وصول الخدمات للمناطق الطرفية أو الفئات الأقل حظاً.",
+                    "scientific_basis": "التنمية المستدامة (SDGs)"
+                }
+            ]
+        },
+        {
+            "code": "N",
+            "name": "الأثر والاستدامة (Navigate)",
+            "weight": "14%",
+            "focus": "العائد الاجتماعي",
+            "indicators": [
+                {
+                    "id": "N-1",
+                    "title": "قياس العائد (SROI)",
+                    "measure": "قياس الأثر الاجتماعي والاقتصادي للاستثمار في المشروع.",
+                    "scientific_basis": "نموذج العائد الاجتماعي"
+                },
+                {
+                    "id": "N-2",
+                    "title": "مستويات الأثر",
+                    "measure": "قياس تغير السلوك وليس فقط الرضا (مستويات كيركباتريك 3 و 4).",
+                    "scientific_basis": "نموذج كيركباتريك (Kirkpatrick)"
+                }
+            ]
+        }
+    ]
+}
+
+# ---------------------------------------------------------
+# 2. كود توليد ملف PDF (The Generator)
+# ---------------------------------------------------------
+class RasinPDF(FPDF):
+    def header(self):
+        # في التطبيق الفعلي، يجب تحميل خط عربي هنا
+        # self.add_font('Amiri', '', 'Amiri-Regular.ttf', uni=True)
+        # self.set_font('Amiri', '', 14)
+        self.set_font('Arial', 'B', 15)
+        self.cell(0, 10, 'RASIN Standards Framework V2.0', 0, 1, 'C')
+        self.ln(5)
+
+    def chapter_title(self, title, weight):
+        self.set_font('Arial', 'B', 12)
+        self.set_fill_color(230, 230, 230)
+        self.cell(0, 10, f'{title} (Weight: {weight})', 0, 1, 'L', 1)
+        self.ln(2)
+
+    def chapter_body(self, indicators):
+        self.set_font('Arial', '', 10)
+        for ind in indicators:
+            self.set_text_color(0, 51, 102) # Dark Blue
+            self.cell(0, 8, f"Indicator {ind['id']}: {ind['title']}", 0, 1)
+            self.set_text_color(0, 0, 0)
+            self.multi_cell(0, 6, f"   Measure: {ind['measure']}")
+            self.set_text_color(100, 100, 100) # Grey
+            self.multi_cell(0, 6, f"   Scientific Basis: {ind['scientific_basis']}")
+            self.ln(3)
+        self.ln(5)
+
+# تنفيذ الطباعة
+pdf = RasinPDF()
+pdf.add_page()
+
+# طباعة البيانات من القاموس
+for std in rasin_framework['standards']:
+    # ملاحظة: العناوين هنا بالإنجليزية لضمان عمل الكود دون ملفات خطوط عربية خارجية
+    # عند التطبيق الفعلي، استبدل النصوص الإنجليزية بالعربية من القاموس أعلاه
+    pdf.chapter_title(f"{std['code']} - {std['name']}", std['weight'])
+    pdf.chapter_body(std['indicators'])
+
+# حفظ الملف
+# pdf.output('Rasin_Standards_V2.pdf')
+print("تم صياغة الكود الهيكلي للمعيار بنجاح. يمكنك استخدام البيانات في قاموس 'rasin_framework'")
