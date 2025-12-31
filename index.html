@@ -1,78 +1,113 @@
-from fpdf import FPDF
+# هيكلة معيار رصين 2.0 (Rasin Framework Structure)
+# تم تصميم هذا الهيكل ليكون قابلاً للتطوير والتحويل إلى PDF أو Excel لاحقاً
 
-# 1. بيانات المعيار المطور (Rasin Framework V2.0 Data)
-rasin_framework = {
-    "info": {
-        "title": "معيار رصين لتقييم المشاريع القرائية (الإصدار 2.0)",
-        "vision": "نحو مشاريع قرائية مستدامة تعزز جودة الحياة"
+rasin_v2_framework = {
+    "project_info": {
+        "name": "معيار رصين لتقييم المشاريع القرائية",
+        "version": "2.0",
+        "vision": "مشاريع قرائية مستدامة تعزز جودة الحياة وفق رؤية 2030"
     },
     "standards": [
         {
-            "code": "R", "name": "البحث والتصميم", "weight": "28%",
+            "code": "R",
+            "name": "البحث والتصميم (Research)",
+            "weight": 0.28,
             "indicators": [
-                {"title": "المنهجية التربوية", "measure": "الاستناد لنظرية تعلم معتمدة"},
-                {"title": "مصفوفة المحتوى", "measure": "وجود معايير لاختيار الكتب (بلوم)"},
-                {"title": "المواءمة الوطنية", "measure": "تعزيز الهوية ورؤية 2030"}
+                {
+                    "id": "R-1",
+                    "title": "المنهجية التربوية",
+                    "scientific_basis": "نظريات التعلم الحديثة"
+                },
+                {
+                    "id": "R-2",
+                    "title": "مصفوفة اختيار المحتوى",
+                    "scientific_basis": "تصنيف بلوم (Bloom's Taxonomy)"
+                },
+                {
+                    "id": "R-3",
+                    "title": "المواءمة الوطنية",
+                    "scientific_basis": "برنامج تنمية القدرات البشرية"
+                }
             ]
         },
         {
-            "code": "A", "name": "التطبيق والأنشطة", "weight": "24%",
+            "code": "A",
+            "name": "التطبيق والأنشطة (Application)",
+            "weight": 0.24,
             "indicators": [
-                {"title": "استراتيجيات التفكير", "measure": "توظيف التفكير الناقد"},
-                {"title": "بيئة التدفق (Flow)", "measure": "التوازن بين التحدي والمهارة"},
-                {"title": "جودة المخرجات", "measure": "إنتاج معرفي ملموس"}
+                {
+                    "id": "A-1",
+                    "title": "استراتيجيات التفكير الناقد",
+                    "scientific_basis": "التعلم النشط (Active Learning)"
+                },
+                {
+                    "id": "A-2",
+                    "title": "بيئة التدفق (Flow)",
+                    "scientific_basis": "نظرية التدفق (Mihaly Csikszentmihalyi)"
+                },
+                {
+                    "id": "A-3",
+                    "title": "جودة المخرجات المعرفية",
+                    "scientific_basis": "التعلم القائم على المشاريع (PBL)"
+                }
             ]
         },
         {
-            "code": "S", "name": "الحوكمة والتمكين", "weight": "18%",
+            "code": "S",
+            "name": "الحوكمة والتمكين (Stewardship)",
+            "weight": 0.18,
             "indicators": [
-                {"title": "التطوع الاحترافي", "measure": "تفعيل المهارات التخصصية"},
-                {"title": "الكفاءة المالية", "measure": "ضبط الهدر وتعظيم العائد"}
+                {
+                    "id": "S-1",
+                    "title": "التطوع الاحترافي المتخصص",
+                    "scientific_basis": "إدارة الموارد البشرية"
+                },
+                {
+                    "id": "S-2",
+                    "title": "الكفاءة المالية التشغيلية",
+                    "scientific_basis": "المحاسبة الإدارية"
+                }
             ]
         },
         {
-            "code": "I", "name": "الشمول والوصول", "weight": "16%",
+            "code": "I",
+            "name": "الشمول والوصول (Inclusion)",
+            "weight": 0.16,
             "indicators": [
-                {"title": "الوصول الرقمي", "measure": "مراعاة ذوي الإعاقة (W3C)"},
-                {"title": "العدالة الجغرافية", "measure": "الوصول للمناطق النائية"}
+                {
+                    "id": "I-1",
+                    "title": "الوصول الرقمي الشامل",
+                    "scientific_basis": "معايير الويب العالمية (W3C)"
+                },
+                {
+                    "id": "I-2",
+                    "title": "العدالة الجغرافية",
+                    "scientific_basis": "أهداف التنمية المستدامة (SDGs)"
+                }
             ]
         },
         {
-            "code": "N", "name": "الأثر والاستدامة", "weight": "14%",
+            "code": "N",
+            "name": "الأثر والاستدامة (Navigate)",
+            "weight": 0.14,
             "indicators": [
-                {"title": "العائد الاجتماعي", "measure": "قياس SROI"},
-                {"title": "تغير السلوك", "measure": "مستوى كيركباتريك 3 و 4"}
+                {
+                    "id": "N-1",
+                    "title": "العائد الاجتماعي على الاستثمار",
+                    "scientific_basis": "نموذج SROI"
+                },
+                {
+                    "id": "N-2",
+                    "title": "قياس تغير السلوك",
+                    "scientific_basis": "نموذج كيركباتريك (مستوى 3)"
+                }
             ]
         }
     ]
 }
 
-# 2. كود إنشاء التقرير
-class RasinPDF(FPDF):
-    def header(self):
-        self.set_font('Arial', 'B', 15)
-        self.cell(0, 10, 'RASIN Framework V2.0', 0, 1, 'C')
-        self.ln(5)
-
-    def chapter_body(self, std):
-        self.set_font('Arial', 'B', 12)
-        self.set_fill_color(240, 240, 240)
-        self.cell(0, 10, f"{std['code']} - {std['name']} ({std['weight']})", 0, 1, 'R', 1) # Right alignment for Arabic context
-        
-        self.set_font('Arial', '', 10)
-        for ind in std['indicators']:
-            # Note: Strict Arabic text requires external font libraries in Python.
-            # This is a simplified structure display.
-            self.cell(0, 8, f"- {ind['title']}: {ind['measure']}", 0, 1, 'R')
-        self.ln(3)
-
-pdf = RasinPDF()
-pdf.add_page()
-
-# طباعة المحتوى
-for std in rasin_framework['standards']:
-    pdf.chapter_body(std)
-
-# حفظ الملف (سيتم الحفظ عند تشغيل الكود في بيئتك)
-# pdf.output("Rasin_V2.pdf")
-print("تم تجهيز هيكل المعيار بنجاح")
+# طباعة للتأكد من سلامة الهيكل
+for standard in rasin_v2_framework["standards"]:
+    print(f"المعيار: {standard['name']} - الوزن: {standard['weight']}")
+    for ind in standard["indicators"]:
+        print(f"   - {ind['title']} (المرجع: {ind['scientific_basis']})")
