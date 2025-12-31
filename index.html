@@ -1,66 +1,124 @@
-# ==========================================================
-# 🧮 حاسبة معيار رصين التفاعلية (Rasin Interactive Calculator)
-# ==========================================================
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مصفوفة رصين - الآلة الحاسبة</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; padding: 20px; text-align: right; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 10px; }
+        .vision { text-align: center; color: #7f8c8d; font-size: 0.9em; margin-bottom: 30px; }
+        .input-group { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #34495e; }
+        .weight { font-size: 0.8em; color: #e67e22; float: left; }
+        input[type="number"] { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        input[type="number"]:focus { border-color: #3498db; outline: none; }
+        button { width: 100%; padding: 15px; background-color: #2c3e50; color: white; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button:hover { background-color: #1a252f; }
+        #result { margin-top: 25px; padding: 20px; border-radius: 10px; display: none; text-align: center; }
+        .gold { background-color: #fff3cd; color: #856404; border: 2px solid #ffeeba; }
+        .silver { background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        .bronze { background-color: #e2e3e5; color: #383d41; border: 2px solid #d6d8db; }
+        .fail { background-color: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+        .final-score { font-size: 2em; font-weight: bold; display: block; margin: 10px 0; }
+    </style>
+</head>
+<body>
 
-def get_valid_score(standard_name):
-    """دالة مساعدة لطلب الرقم والتأكد من صحته"""
-    while True:
-        try:
-            user_input = input(f" >> أدخل درجة المعيار {standard_name} (من 0 إلى 100): ")
-            score = float(user_input)
-            if 0 <= score <= 100:
-                return score
-            else:
-                print("❌ خطأ: الرجاء إدخال رقم بين 0 و 100 فقط.")
-        except ValueError:
-            print("❌ خطأ: الرجاء إدخال قيمة رقمية صحيحة.")
+<div class="container">
+    <h1>حاسبة معيار رصين (RASIN)</h1>
+    <p class="vision">تقييم منهجي للمشاريع القرائية وفق رؤية 2030</p>
 
-def run_rasin_interactive():
-    print("\n" + "="*50)
-    print("      مرحباً بك في نظام تقييم مشاريع رصين      ")
-    print("="*50)
-    print("الرجاء إدخال تقييم المحكّم لكل معيار أدناه:\n")
+    <div class="input-group">
+        <span class="weight">الوزن: 28%</span>
+        <label>R - البحث والتصميم والمحتوى</label>
+        <input type="number" id="score_r" placeholder="الدرجة من 100" min="0" max="100">
+    </div>
 
-    # 1. إدخال الدرجات يدوياً
-    scores = {}
-    scores['R'] = get_valid_score("R - البحث والتصميم (الوزن 28%)")
-    scores['A'] = get_valid_score("A - الأنشطة والتطبيق (الوزن 24%)")
-    scores['S'] = get_valid_score("S - الحوكمة والتمكين (الوزن 18%)")
-    scores['I'] = get_valid_score("I - الشمول والوصول (الوزن 16%)")
-    scores['N'] = get_valid_score("N - الأثر والاستدامة (الوزن 14%)")
+    <div class="input-group">
+        <span class="weight">الوزن: 24%</span>
+        <label>A - الأنشطة والتطبيق</label>
+        <input type="number" id="score_a" placeholder="الدرجة من 100" min="0" max="100">
+    </div>
 
-    # 2. الأوزان النسبية
-    weights = {'R': 0.28, 'A': 0.24, 'S': 0.18, 'I': 0.16, 'N': 0.14}
+    <div class="input-group">
+        <span class="weight">الوزن: 18%</span>
+        <label>S - الحوكمة والتمكين</label>
+        <input type="number" id="score_s" placeholder="الدرجة من 100" min="0" max="100">
+    </div>
 
-    # 3. المعالجة الحسابية
-    print("\n" + "-"*50)
-    print(" جارٍ معالجة البيانات وبناء المصفوفة...")
-    print("-"*50)
-    
-    total_score = 0
-    for code, score in scores.items():
-        weight = weights[code]
-        weighted_val = score * weight
-        total_score += weighted_val
-        print(f" ✅ المعيار {code}: {score} × {weight} = {weighted_val:.2f} نقطة")
+    <div class="input-group">
+        <span class="weight">الوزن: 16%</span>
+        <label>I - الشمول والوصول</label>
+        <input type="number" id="score_i" placeholder="الدرجة من 100" min="0" max="100">
+    </div>
 
-    # 4. النتيجة النهائية
-    print("="*50)
-    print(f" 📊 النتيجة النهائية الموزونة: {total_score:.2f} / 100")
-    
-    if total_score >= 90:
-        print(" 🏆 التصنيف: رصين ذهبي (Gold)")
-        print(" التوصية: اعتماد المشروع كنموذج وطني.")
-    elif total_score >= 80:
-        print(" 🥈 التصنيف: رصين فضي (Silver)")
-        print(" التوصية: اعتماد المشروع مع خطة تحسين بسيطة.")
-    elif total_score >= 70:
-        print(" 🥉 التصنيف: رصين برونزي (Bronze)")
-        print(" التوصية: اعتماد مشروط لمدة سنة.")
-    else:
-        print(" 🛠️ التصنيف: يحتاج تطوير (Needs Improvement)")
-        print(" التوصية: المشروع غير جاهز للاعتماد حالياً.")
-    print("="*50 + "\n")
+    <div class="input-group">
+        <span class="weight">الوزن: 14%</span>
+        <label>N - الأثر والاستدامة</label>
+        <input type="number" id="score_n" placeholder="الدرجة من 100" min="0" max="100">
+    </div>
 
-if __name__ == "__main__":
-    run_rasin_interactive()
+    <button onclick="calculateRasin()">احسب النتيجة الآن</button>
+
+    <div id="result">
+        <h3>النتيجة النهائية الموزونة</h3>
+        <span class="final-score" id="finalValue">0</span>
+        <h2 id="finalBadge">تصنيف المشروع</h2>
+        <p id="recommendation"></p>
+    </div>
+</div>
+
+<script>
+    function calculateRasin() {
+        // جلب القيم من الخانات
+        let r = parseFloat(document.getElementById('score_r').value) || 0;
+        let a = parseFloat(document.getElementById('score_a').value) || 0;
+        let s = parseFloat(document.getElementById('score_s').value) || 0;
+        let i = parseFloat(document.getElementById('score_i').value) || 0;
+        let n = parseFloat(document.getElementById('score_n').value) || 0;
+
+        // التأكد من أن الأرقام لا تتجاوز 100
+        if([r, a, s, i, n].some(val => val > 100)) {
+            alert("الرجاء إدخال درجات لا تتجاوز 100");
+            return;
+        }
+
+        // المعادلة الحسابية (الأوزان)
+        let total = (r * 0.28) + (a * 0.24) + (s * 0.18) + (i * 0.16) + (n * 0.14);
+        total = total.toFixed(2); // تقريب لرقمين عشريين
+
+        // عرض النتيجة
+        let resDiv = document.getElementById('result');
+        let valSpan = document.getElementById('finalValue');
+        let badgeH2 = document.getElementById('finalBadge');
+        let recP = document.getElementById('recommendation');
+
+        resDiv.style.display = "block";
+        resDiv.className = ""; // مسح الألوان السابقة
+        valSpan.innerText = total + " / 100";
+
+        // منطق التصنيف
+        if (total >= 90) {
+            resDiv.classList.add("gold");
+            badgeH2.innerText = "🥇 رصين ذهبي";
+            recP.innerText = "مشروع استثنائي ونموذج وطني يُحتذى به.";
+        } else if (total >= 80) {
+            resDiv.classList.add("silver");
+            badgeH2.innerText = "🥈 رصين فضي";
+            recP.innerText = "جودة عالية، يُعتمد مع خطة تطويرية بسيطة.";
+        } else if (total >= 70) {
+            resDiv.classList.add("bronze");
+            badgeH2.innerText = "🥉 رصين برونزي";
+            recP.innerText = "يفي بالحد الأدنى، يُمنح اعتماد مشروط.";
+        } else {
+            resDiv.classList.add("fail");
+            badgeH2.innerText = "🛠️ يحتاج تطوير";
+            recP.innerText = "لا يحقق المعايير المطلوبة حالياً، يتطلب إعادة هيكلة.";
+        }
+    }
+</script>
+
+</body>
+</html>
