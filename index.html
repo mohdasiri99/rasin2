@@ -1,135 +1,66 @@
-import pandas as pd
-from datetime import datetime
+# ==========================================================
+# 🧮 حاسبة معيار رصين التفاعلية (Rasin Interactive Calculator)
+# ==========================================================
 
-class RasinMatrixEngine:
-    def __init__(self):
-        # تعريف الأوزان النسبية وفقاً للملف المعتمد 
-        self.weights = {
-            'R': {'name': 'البحث والتصميم', 'weight': 28},
-            'A': {'name': 'الأنشطة والتطبيق', 'weight': 24},
-            'S': {'name': 'الحوكمة والتمكين', 'weight': 18},
-            'I': {'name': 'الشمول والوصول', 'weight': 16},
-            'N': {'name': 'الأثر والاستدامة', 'weight': 14}
-        }
-        
-        # تعريف نطاقات التصنيف وفقاً للملف المعتمد 
-        self.categories = {
-            'Gold': {'min': 90, 'label': 'رصين ذهبي 🥇 (تميز استثنائي)'},
-            'Silver': {'min': 80, 'label': 'رصين فضي 🥈 (جودة عالية)'},
-            'Bronze': {'min': 70, 'label': 'رصين برونزي 🥉 (يفي بالأساسيات)'},
-            'Fail': {'min': 0, 'label': 'يحتاج تطوير 🛠️ (يتطلب إعادة هيكلة)'}
-        }
+def get_valid_score(standard_name):
+    """دالة مساعدة لطلب الرقم والتأكد من صحته"""
+    while True:
+        try:
+            user_input = input(f" >> أدخل درجة المعيار {standard_name} (من 0 إلى 100): ")
+            score = float(user_input)
+            if 0 <= score <= 100:
+                return score
+            else:
+                print("❌ خطأ: الرجاء إدخال رقم بين 0 و 100 فقط.")
+        except ValueError:
+            print("❌ خطأ: الرجاء إدخال قيمة رقمية صحيحة.")
 
-    def evaluate_project(self, project_name, gate_checks, scores):
-        """
-        دالة التقييم الرئيسية
-        :param project_name: اسم المشروع
-        :param gate_checks: قاموس بوابات العبور (نعم/لا)
-        :param scores: قاموس الدرجات الخام لكل معيار (من 100)
-        """
-        
-        # 1. مرحلة الفلترة (Gatekeeping)
-        # إذا فشل المشروع في أي من معايير الأهلية، يتم رفضه فوراً
-        for check, passed in gate_checks.items():
-            if not passed:
-                return {
-                    'Project': project_name,
-                    'Status': 'Rejected ⛔',
-                    'Reason': f'فشل في معيار الأهلية: {check}',
-                    'Final_Score': 0
-                }
+def run_rasin_interactive():
+    print("\n" + "="*50)
+    print("      مرحباً بك في نظام تقييم مشاريع رصين      ")
+    print("="*50)
+    print("الرجاء إدخال تقييم المحكّم لكل معيار أدناه:\n")
 
-        # 2. مرحلة الاحتساب الموزون (Weighted Scoring)
-        final_score = 0
-        details = {}
-        
-        print(f"\n--- تحليل أداء مشروع: {project_name} ---")
-        
-        for code, criteria in self.weights.items():
-            # الدرجة الخام (من 100) التي وضعها المحكم
-            raw_score = scores.get(code, 0) 
-            # الوزن النسبي للمعيار
-            weight = criteria['weight']
-            # الدرجة الموزونة (التي تدخل في المجموع النهائي)
-            weighted_score = (raw_score / 100) * weight
-            
-            final_score += weighted_score
-            details[code] = weighted_score
-            
-            print(f"المعيار {code} ({criteria['name']}): حصل على {raw_score}/100 -> يساهم بـ {weighted_score:.2f} نقطة")
+    # 1. إدخال الدرجات يدوياً
+    scores = {}
+    scores['R'] = get_valid_score("R - البحث والتصميم (الوزن 28%)")
+    scores['A'] = get_valid_score("A - الأنشطة والتطبيق (الوزن 24%)")
+    scores['S'] = get_valid_score("S - الحوكمة والتمكين (الوزن 18%)")
+    scores['I'] = get_valid_score("I - الشمول والوصول (الوزن 16%)")
+    scores['N'] = get_valid_score("N - الأثر والاستدامة (الوزن 14%)")
 
-        # 3. مرحلة التصنيف (Classification)
-        category_label = self.get_category(final_score)
-        
-        return {
-            'Project': project_name,
-            'Status': 'Evaluated ✅',
-            'Final_Score': round(final_score, 2),
-            'Category': category_label,
-            'Details': details
-        }
+    # 2. الأوزان النسبية
+    weights = {'R': 0.28, 'A': 0.24, 'S': 0.18, 'I': 0.16, 'N': 0.14}
 
-    def get_category(self, score):
-        if score >= self.categories['Gold']['min']:
-            return self.categories['Gold']['label']
-        elif score >= self.categories['Silver']['min']:
-            return self.categories['Silver']['label']
-        elif score >= self.categories['Bronze']['min']:
-            return self.categories['Bronze']['label']
-        else:
-            return self.categories['Fail']['label']
+    # 3. المعالجة الحسابية
+    print("\n" + "-"*50)
+    print(" جارٍ معالجة البيانات وبناء المصفوفة...")
+    print("-"*50)
+    
+    total_score = 0
+    for code, score in scores.items():
+        weight = weights[code]
+        weighted_val = score * weight
+        total_score += weighted_val
+        print(f" ✅ المعيار {code}: {score} × {weight} = {weighted_val:.2f} نقطة")
 
-# --- منطقة المحاكاة (تطبيق عملي) ---
+    # 4. النتيجة النهائية
+    print("="*50)
+    print(f" 📊 النتيجة النهائية الموزونة: {total_score:.2f} / 100")
+    
+    if total_score >= 90:
+        print(" 🏆 التصنيف: رصين ذهبي (Gold)")
+        print(" التوصية: اعتماد المشروع كنموذج وطني.")
+    elif total_score >= 80:
+        print(" 🥈 التصنيف: رصين فضي (Silver)")
+        print(" التوصية: اعتماد المشروع مع خطة تحسين بسيطة.")
+    elif total_score >= 70:
+        print(" 🥉 التصنيف: رصين برونزي (Bronze)")
+        print(" التوصية: اعتماد مشروط لمدة سنة.")
+    else:
+        print(" 🛠️ التصنيف: يحتاج تطوير (Needs Improvement)")
+        print(" التوصية: المشروع غير جاهز للاعتماد حالياً.")
+    print("="*50 + "\n")
 
-# 1. تشغيل المحرك
-engine = RasinMatrixEngine()
-
-# 2. بيانات مشروع افتراضي (للتجربة)
-project_data = {
-    'name': 'نادي القراء المحترفين',
-    'gates': {
-        'Safety': True,       # السلامة الفكرية
-        'Legal': True,        # الصفة النظامية
-        'Language': True      # السلامة اللغوية
-    },
-    'scores': {
-        'R': 95,  # قوي جداً في التصميم (من 100)
-        'A': 85,  # جيد جداً في الأنشطة
-        'S': 70,  # متوسط في الإدارة
-        'I': 60,  # ضعيف في الوصول الشامل
-        'N': 50   # ضعيف في قياس الأثر
-    }
-}
-
-# 3. تنفيذ التقييم
-result = engine.evaluate_project(
-    project_data['name'], 
-    project_data['gates'], 
-    project_data['scores']
-)
-
-# 4. طباعة التقرير النهائي (Simulating the Dashboard Output)
-print("\n" + "="*40)
-print("📄 التقرير النهائي - نظام رصين")
-print("="*40)
-print(f"المشروع: {result['Project']}")
-print(f"الحالة: {result['Status']}")
-
-if result['Status'] == 'Evaluated ✅':
-    print(f"الدرجة النهائية الموزونة: {result['Final_Score']} / 100")
-    print(f"التصنيف المستحق: {result['Category']}")
-    print("-" * 20)
-    print("توزيع النقاط:")
-    print(f" - R (البحث): {result['Details']['R']} / 28")
-    print(f" - A (الأنشطة): {result['Details']['A']} / 24")
-    print(f" - S (الحوكمة): {result['Details']['S']} / 18")
-    print(f" - I (الشمول): {result['Details']['I']} / 16")
-    print(f" - N (الأثر): {result['Details']['N']} / 14")
-else:
-    print(f"سبب الرفض: {result['Reason']}")
-print("="*40)
-
-# ميزة إضافية: تصدير البيانات إلى Excel (محاكاة)
-# df = pd.DataFrame([result])
-# df.to_excel("Rasin_Report.xlsx")
-# print("تم تصدير التقرير إلى Excel")
+if __name__ == "__main__":
+    run_rasin_interactive()
