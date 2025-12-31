@@ -20,6 +20,20 @@
         .silver { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .bronze { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
         .fail { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        /* تنسيق قسم الحقوق الجديد */
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 13px;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+        .footer strong { color: #1a5f7a; }
+        .footer a { color: #2980b9; text-decoration: none; font-weight: bold; }
+        .footer a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -64,52 +78,47 @@
         <h2 id="finalScore">0</h2>
         <h3 id="badge"></h3>
     </div>
+
+    <div class="footer">
+        <p>فكرة وتصميم وبرمجة:</p>
+        <p><strong>MOHAMMED ALI ASIRI</strong></p>
+        <p>للتواصل: <a href="tel:0564327080">0564327080</a></p>
+        <p style="font-size: 11px; margin-top: 5px;">© 2025 جميع الحقوق محفوظة لمشروع رصين</p>
+    </div>
+
 </div>
 
 <script>
     function calc() {
-        // التأكد من أن الزر يعمل
-        console.log("Button Clicked");
-
-        // جلب القيم، وفي حال كانت فارغة نعتبرها صفر
         let r = document.getElementById('r').value; r = r === "" ? 0 : parseFloat(r);
         let a = document.getElementById('a').value; a = a === "" ? 0 : parseFloat(a);
         let s = document.getElementById('s').value; s = s === "" ? 0 : parseFloat(s);
         let i = document.getElementById('i').value; i = i === "" ? 0 : parseFloat(i);
         let n = document.getElementById('n').value; n = n === "" ? 0 : parseFloat(n);
 
-        // التحقق من القيم العالية
         if (r > 100 || a > 100 || s > 100 || i > 100 || n > 100) { 
             alert("عذراً، أقصى درجة لكل معيار هي 100"); 
             return; 
         }
 
-        // المعادلة الحسابية
         let total = (r * 0.28) + (a * 0.24) + (s * 0.18) + (i * 0.16) + (n * 0.14);
         
-        // إظهار النتيجة
         let resDiv = document.getElementById('result');
         let badge = document.getElementById('badge');
         
         resDiv.style.display = "block";
-        // إعادة تعيين الكلاسات
         resDiv.className = ""; 
         
         document.getElementById('finalScore').innerText = total.toFixed(2) + " / 100";
 
-        // منطق التصنيف
         if (total >= 90) {
-            resDiv.classList.add("gold"); 
-            badge.innerText = "🥇 رصين ذهبي";
+            resDiv.classList.add("gold"); badge.innerText = "🥇 رصين ذهبي";
         } else if (total >= 80) {
-            resDiv.classList.add("silver"); 
-            badge.innerText = "🥈 رصين فضي";
+            resDiv.classList.add("silver"); badge.innerText = "🥈 رصين فضي";
         } else if (total >= 70) {
-            resDiv.classList.add("bronze"); 
-            badge.innerText = "🥉 رصين برونزي";
+            resDiv.classList.add("bronze"); badge.innerText = "🥉 رصين برونزي";
         } else {
-            resDiv.classList.add("fail"); 
-            badge.innerText = "🛠️ يحتاج تطوير";
+            resDiv.classList.add("fail"); badge.innerText = "🛠️ يحتاج تطوير";
         }
     }
 </script>
