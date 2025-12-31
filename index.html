@@ -58,7 +58,7 @@
         <input type="number" id="n" placeholder="0 - 100">
     </div>
 
-    <button onclick="calc()">احسب النتيجة</button>
+    <button type="button" onclick="calc()">احسب النتيجة الآن</button>
 
     <div id="result">
         <h2 id="finalScore">0</h2>
@@ -68,25 +68,51 @@
 
 <script>
     function calc() {
-        let r = Number(document.getElementById('r').value);
-        let a = Number(document.getElementById('a').value);
-        let s = Number(document.getElementById('s').value);
-        let i = Number(document.getElementById('i').value);
-        let n = Number(document.getElementById('n').value);
+        // التأكد من أن الزر يعمل
+        console.log("Button Clicked");
 
-        if (r>100 || a>100 || s>100 || i>100 || n>100) { alert("الدرجة العظمى 100"); return; }
+        // جلب القيم، وفي حال كانت فارغة نعتبرها صفر
+        let r = document.getElementById('r').value; r = r === "" ? 0 : parseFloat(r);
+        let a = document.getElementById('a').value; a = a === "" ? 0 : parseFloat(a);
+        let s = document.getElementById('s').value; s = s === "" ? 0 : parseFloat(s);
+        let i = document.getElementById('i').value; i = i === "" ? 0 : parseFloat(i);
+        let n = document.getElementById('n').value; n = n === "" ? 0 : parseFloat(n);
 
-        let total = (r*0.28) + (a*0.24) + (s*0.18) + (i*0.16) + (n*0.14);
+        // التحقق من القيم العالية
+        if (r > 100 || a > 100 || s > 100 || i > 100 || n > 100) { 
+            alert("عذراً، أقصى درجة لكل معيار هي 100"); 
+            return; 
+        }
+
+        // المعادلة الحسابية
+        let total = (r * 0.28) + (a * 0.24) + (s * 0.18) + (i * 0.16) + (n * 0.14);
+        
+        // إظهار النتيجة
         let resDiv = document.getElementById('result');
         let badge = document.getElementById('badge');
         
         resDiv.style.display = "block";
+        // إعادة تعيين الكلاسات
         resDiv.className = ""; 
+        
         document.getElementById('finalScore').innerText = total.toFixed(2) + " / 100";
 
+        // منطق التصنيف
         if (total >= 90) {
-            resDiv.classList.add("gold"); badge.innerText = "🥇 رصين ذهبي";
+            resDiv.classList.add("gold"); 
+            badge.innerText = "🥇 رصين ذهبي";
         } else if (total >= 80) {
-            resDiv.classList.add("silver"); badge.innerText = "🥈 رصين فضي";
+            resDiv.classList.add("silver"); 
+            badge.innerText = "🥈 رصين فضي";
         } else if (total >= 70) {
-            resDiv.classList.add
+            resDiv.classList.add("bronze"); 
+            badge.innerText = "🥉 رصين برونزي";
+        } else {
+            resDiv.classList.add("fail"); 
+            badge.innerText = "🛠️ يحتاج تطوير";
+        }
+    }
+</script>
+
+</body>
+</html>
